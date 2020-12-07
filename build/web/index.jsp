@@ -1,5 +1,49 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*" %>
+
+<%
+    if (request.getParameter("submit") != null) {
+        String name = request.getParameter("sname");
+        String course = request.getParameter("course");
+        String fee = request.getParameter("fee");
+
+        String jdbcUrl = "jdbc:mysql://localhost:3306/padata";
+        Connection conn = null;
+        PreparedStatement pst = null;
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(jdbcUrl, "scott", "tiger");
+            pst = conn.prepareStatement("INSERT INTO studentreg(stname, course, fee) VALUE (?, ?, ?)");
+            pst.setString(1, name);
+            pst.setString(2, course);
+            pst.setString(3, fee);
+            pst.executeUpdate();
+            
+        } catch (Exception e) {
+
+        } finally {
+            if (pst != null) {
+                pst.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+%>
+
+<script>
+    alert("Record Added...");
+</script>
+
+<%
+    }
+
+%>
+
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -39,7 +83,6 @@
                     <div alight="right">
                         <input type="submit" id="submit" value="Submit" name="submit" class="btn btn-info" />
                         <input type="reset" id="reset" value="Reset" name="reset" class="btn btn-warning" />
-
                     </div>
 
                 </form>
@@ -58,7 +101,7 @@
                                 <th>Edit</th>
                                 <th>Delete</th>
                             </tr>
-                            
+
                             <tr>                                
                                 <td></td>
                                 <td></td>
@@ -68,7 +111,7 @@
                             </tr>
                         </thead>
                     </table>
-                    
+
                 </div>
             </div>
 

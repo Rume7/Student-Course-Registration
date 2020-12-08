@@ -3,7 +3,7 @@
 <%@page import="java.sql.*" %>
 
 <%
-    if (request.getParameter("submit") != null) {
+    if (request.getParameter("submit") != null) { 
         String name = request.getParameter("sname");
         String course = request.getParameter("course");
         String fee = request.getParameter("fee");
@@ -41,8 +41,6 @@
     }
 
 %>
-
-
 
 <!DOCTYPE html>
 <html>
@@ -101,14 +99,40 @@
                                 <th>Edit</th>
                                 <th>Delete</th>
                             </tr>
+                            
+                            <%
+                            
+                                Connection con ;
+                                PreparedStatement pst ;
+                                ResultSet rs;
+                                
+                                Class.forName("com.mysql.jdbc.Driver");
+                                String jdbcUrl = "jdbc:mysql://localhost:3306/padata";
+                                con = DriverManager.getConnection(jdbcUrl, "scott", "tiger");
+                                
+                                String query = "SELECT * FROM studentreg";
+                                Statement st = con.createStatement();
+                                rs = st.executeQuery(query);
+                                
+                                while(rs.next()) {
+                                    String id = rs.getString("id");
+                                    
+                            %>
+                            
 
                             <tr>                                
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>                                
+                                <td><%= rs.getString("stname") %></td>
+                                <td><%= rs.getString("course") %></td>
+                                <td><%= rs.getString("fee") %></td>
+                                <td><a href="update.jsp?id=<%=id%>">Edit</a></td>
+                                <td><a href="delete.jsp?id=<%=id%>">Delete</a></td>                                
                             </tr>
+                            
+                            
+                            <%
+                                }
+                            %>
+                            
                         </thead>
                     </table>
 
